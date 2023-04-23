@@ -1,0 +1,23 @@
+package com.example.demo.config;
+
+import org.postgresql.ds.PGSimpleDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
+
+@Configuration
+public class DatabaseConfiguration {
+    @Bean
+    public DataSource dataSource() {
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+
+        dataSource.setUser("postgres");
+        dataSource.setPassword("admin");
+        // dataSource.setUser("pgAdmin");
+        // dataSource.setPassword("pgAdmin");
+        // dataSource.setUrl("jdbc:postgresql://local:5432/postgres");
+        dataSource.setUrl("jdbc:postgresql://local:5432/DBTest1");
+        return dataSource;
+    }
+}
