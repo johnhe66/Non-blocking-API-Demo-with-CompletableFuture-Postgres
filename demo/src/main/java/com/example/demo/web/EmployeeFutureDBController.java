@@ -11,15 +11,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/api/employees")
-public class EmployeeController {
+@RequestMapping("/api/future/db")
+public class EmployeeFutureDBController {
     @Autowired
     private EmployeeRepository employeeRepository;
     
-    @GetMapping
-    public CompletableFuture<List<Employee>> getEmployees() {
-        // return employeeService.getEmployees();
-        return employeeRepository.findAllAsync();
+    @GetMapping("/employees")
+    public CompletableFuture<List<Employee>> getEmployees() {        
+        return employeeRepository.findAllAsyncFuture();
     }
 
     

@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Employee;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,9 +31,15 @@ public class EmployeeRepository {
     public EmployeeRepository( DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    
-    public CompletableFuture<List<Employee>> findAllAsync() {
+
+    public CompletableFuture<List<Employee>> findAllAsyncFuture() {
         return CompletableFuture.supplyAsync(this::findAll, executorService);
+    }
+
+    public Flux<List<Employee>> findAllAsyncFlux() {
+        return Mono.fromCallable(this::findAll)
+                .subscribeOn(Schedulers.boundedElastic())
+                .flux();
     }
 
     private List<Employee> findAll() {
@@ -38,6 +48,8 @@ public class EmployeeRepository {
              PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Employee");
              ResultSet resultSet = stmt.executeQuery()) {
 
+            // block thread for a few seconds
+            Thread.sleep(3000);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
