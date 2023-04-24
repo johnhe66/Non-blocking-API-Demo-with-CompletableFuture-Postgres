@@ -1,7 +1,7 @@
 package com.example.demo.repo;
 
-import org.postgresql.ds.PGSimpleDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.postgresql.ds.PGSimpleDataSource;
+// import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +27,7 @@ public class EmployeeRepository {
     private final DataSource dataSource;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-    @Autowired
+    // @Autowired
     public EmployeeRepository( DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -42,14 +42,14 @@ public class EmployeeRepository {
                 .flux();
     }
 
-    private List<Employee> findAll() {
+    public List<Employee> findAll() {
         List<Employee> employees = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Employee");
              ResultSet resultSet = stmt.executeQuery()) {
 
             // block thread for a few seconds
-            Thread.sleep(3000);
+            Thread.sleep(5000);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
